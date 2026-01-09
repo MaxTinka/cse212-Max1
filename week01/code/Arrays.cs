@@ -16,26 +16,24 @@ public static class Arrays
         // ====================================================
         // PLAN FOR MULTIPLESOF FUNCTION:
         // ====================================================
-        // Step 1: Understand the requirement
-        //   - We need to create an array of size 'length'
-        //   - First element is the number itself
-        //   - Each subsequent element is a multiple of the number
-        //   - Example: MultiplesOf(7, 5) → {7, 14, 21, 28, 35}
-        //   - Pattern: array[i] = number × (i + 1)
+        // Step 1: Understand what needs to be done
+        //   - Input: A starting number and how many multiples we need
+        //   - Output: An array containing the multiples
+        //   - Example: MultiplesOf(3, 5) → {3, 6, 9, 12, 15}
+        //   - Pattern: Each element = number × (position + 1)
+        //   - Position 0: number × 1 = 3
+        //   - Position 1: number × 2 = 6
+        //   - Position 2: number × 3 = 9
+        //   - etc.
         //
         // Step 2: Create the array with correct size
-        //   - Use 'new double[length]' to create array
-        //   - This gives us an array with 'length' elements
+        //   - We know we need 'length' elements
+        //   - Create array: double[] result = new double[length];
         //
         // Step 3: Fill the array using a loop
         //   - Loop from i = 0 to i < length
-        //   - For each position i:
-        //     - Calculate: number × (i + 1)
-        //     - Store in array[i]
-        //   - Why (i + 1)? Because:
-        //     - When i=0: number × (0+1) = number (first multiple)
-        //     - When i=1: number × (1+1) = number × 2 (second multiple)
-        //     - etc.
+        //   - For each position i, calculate: number × (i + 1)
+        //   - Store in result[i]
         //
         // Step 4: Return the completed array
         // ====================================================
@@ -46,12 +44,15 @@ public static class Arrays
         // Step 3: Fill the array with multiples
         for (int i = 0; i < length; i++)
         {
-            // Calculate (i+1)th multiple of the number
+            // Calculate the (i+1)th multiple
+            // i=0 → number × 1 (first multiple)
+            // i=1 → number × 2 (second multiple)
+            // i=2 → number × 3 (third multiple)
             result[i] = number * (i + 1);
         }
         
         // Step 4: Return the array
-        return result; // replace this return statement with your own
+        return result;
     }
 
     /// <summary>
@@ -71,35 +72,34 @@ public static class Arrays
         // ====================================================
         // PLAN FOR ROTATELISTRIGHT FUNCTION:
         // ====================================================
-        // Step 1: Understand the rotation requirement
-        //   - We're rotating the list RIGHT by 'amount' positions
-        //   - Last 'amount' elements move to the front
-        //   - Example: {1,2,3,4,5,6,7,8,9}, amount=3 → {7,8,9,1,2,3,4,5,6}
-        //   - Amount is always valid: 1 ≤ amount ≤ data.Count
+        // Step 1: Understand the rotation operation
+        //   - Rotating right means moving elements from the end to the beginning
+        //   - Example: {1,2,3,4,5,6,7,8,9}, amount=3
+        //     Last 3 elements (7,8,9) move to front
+        //     Result: {7,8,9,1,2,3,4,5,6}
+        //   - Amount is always between 1 and data.Count
         //
-        // Step 2: Check edge cases
-        //   - If data is null or has 0-1 elements, nothing to do
+        // Step 2: Check for simple cases
+        //   - If list is null or empty, do nothing
+        //   - If list has only 1 element, rotation does nothing
         //   - If amount equals data.Count, full rotation returns to original
         //
-        // Step 3: Calculate split point
-        //   - We need to find where to split the list
-        //   - Elements from split point to end should move to front
-        //   - splitIndex = data.Count - amount
-        //   - Example: 9 elements, amount=3 → splitIndex = 9-3 = 6
-        //     Elements at indices 6,7,8 (values 7,8,9) move to front
+        // Step 3: Calculate where to split the list
+        //   - We need to move the last 'amount' elements to the front
+        //   - Split point = data.Count - amount
+        //   - Example: 9 elements, amount=3 → split point = 9-3 = 6
+        //     Elements from index 6 to end (indices 6,7,8) move to front
         //
-        // Step 4: Extract the elements to move
-        //   - Use GetRange(splitIndex, amount) to get last 'amount' elements
+        // Step 4: Use list slicing to solve the problem
+        //   - Get the last 'amount' elements using GetRange(splitIndex, amount)
         //   - Store them in a temporary list
+        //   - Remove them from original list using RemoveRange(splitIndex, amount)
+        //   - Insert them at the beginning using InsertRange(0, tempList)
         //
-        // Step 5: Remove those elements from original list
-        //   - Use RemoveRange(splitIndex, amount) to remove them
-        //
-        // Step 6: Insert the elements at the beginning
-        //   - Use InsertRange(0, tempList) to add them to front
-        //
-        // Alternative approach: Could create new list and replace data,
-        // but modifying in-place is more memory efficient.
+        // Step 5: Alternative approach (not using list methods)
+        //   - Could create a new list and build it manually
+        //   - Or could rotate elements one by one using modulo arithmetic
+        //   - But the list slicing approach is clean and efficient
         // ====================================================
         
         // Step 2: Handle edge cases
@@ -109,29 +109,43 @@ public static class Arrays
             return;
         }
         
-        // If amount equals data.Count, rotation brings us back to start
+        // If amount equals the list length, rotation does nothing
         if (amount == data.Count)
         {
             return;
         }
         
-        // Step 3: Calculate split point
+        // Step 3: Calculate the split point
+        // We want the last 'amount' elements to move to the front
         int splitIndex = data.Count - amount;
         
-        // Step 4: Get the elements that need to move to front
+        // Step 4: Use list slicing to perform the rotation
+        // Get the elements that need to move to the front (last 'amount' elements)
         List<int> elementsToMove = data.GetRange(splitIndex, amount);
         
-        // Step 5: Remove those elements from their current position
+        // Remove those elements from their current position at the end
         data.RemoveRange(splitIndex, amount);
         
-        // Step 6: Insert the elements at the beginning
+        // Insert them at the beginning of the list
         data.InsertRange(0, elementsToMove);
         
-        // Alternative implementation (commented out):
+        // Alternative implementation using a new list (commented out):
         // List<int> rotated = new List<int>();
-        // rotated.AddRange(data.GetRange(data.Count - amount, amount)); // Last 'amount' elements
-        // rotated.AddRange(data.GetRange(0, data.Count - amount));      // First part
+        // // Add the last 'amount' elements first
+        // rotated.AddRange(data.GetRange(data.Count - amount, amount));
+        // // Add the remaining elements
+        // rotated.AddRange(data.GetRange(0, data.Count - amount));
+        // // Clear the original and add the rotated elements
         // data.Clear();
         // data.AddRange(rotated);
+        
+        // Alternative implementation using modulo and single loop (commented out):
+        // List<int> temp = new List<int>(data);
+        // for (int i = 0; i < data.Count; i++)
+        // {
+        //     // New position for element at index i
+        //     int newIndex = (i + amount) % data.Count;
+        //     data[newIndex] = temp[i];
+        // }
     }
 }
