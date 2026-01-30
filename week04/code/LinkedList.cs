@@ -84,7 +84,12 @@ public class LinkedList : IEnumerable<int>
                     Node newNode = new(newValue);
                     newNode.Prev = curr;
                     newNode.Next = curr.Next;
-                    curr.Next!.Prev = newNode;
+                    
+                    // FIXED: Explicit null check instead of !
+                    if (curr.Next is not null)
+                    {
+                        curr.Next.Prev = newNode;
+                    }
                     curr.Next = newNode;
                 }
                 return;
@@ -151,7 +156,8 @@ public class LinkedList : IEnumerable<int>
         }
     }
 
-    public IEnumerable Reverse()
+    // FIXED: Returns IEnumerable<int> instead of non-generic IEnumerable
+    public IEnumerable<int> Reverse()
     {
         var curr = _tail;
         
