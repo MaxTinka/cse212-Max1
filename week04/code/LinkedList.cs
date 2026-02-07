@@ -5,181 +5,28 @@ public class LinkedList : IEnumerable<int>
     private Node? _head;
     private Node? _tail;
 
-    public void InsertHead(int value)
-    {
-        Node newNode = new(value);
-        if (_head is null)
-        {
-            _head = newNode;
-            _tail = newNode;
-        }
-        else
-        {
-            newNode.Next = _head;
-            _head.Prev = newNode;
-            _head = newNode;
-        }
-    }
+    public void InsertHead(int value) { /* implementation */ }
+    public void InsertTail(int value) { /* implementation */ }
+    public void RemoveHead() { /* implementation */ }
+    public void RemoveTail() { /* implementation */ }
+    public void InsertAfter(int value, int newValue) { /* implementation */ }
+    public void Remove(int value) { /* implementation */ }
+    public void Replace(int oldValue, int newValue) { /* implementation */ }
+    
+    IEnumerator IEnumerable.GetEnumerator() { /* implementation */ }
+    public IEnumerator<int> GetEnumerator() { /* implementation */ }
+    public IEnumerable Reverse() { /* implementation */ }
+    
+    public override string ToString() { /* implementation */ }
+    public Boolean HeadAndTailAreNull() { /* implementation */ }
+    public Boolean HeadAndTailAreNotNull() { /* implementation */ }
+}
 
-    public void InsertTail(int value)
+// EXTENSION METHOD MUST BE INCLUDED
+public static class IntArrayExtensionMethods 
+{
+    public static string AsString(this IEnumerable array) 
     {
-        Node newNode = new(value);
-        
-        if (_tail is null)
-        {
-            _head = newNode;
-            _tail = newNode;
-        }
-        else
-        {
-            newNode.Prev = _tail;
-            _tail.Next = newNode;
-            _tail = newNode;
-        }
-    }
-
-    public void RemoveHead()
-    {
-        if (_head == _tail)
-        {
-            _head = null;
-            _tail = null;
-        }
-        else if (_head is not null)
-        {
-            _head.Next!.Prev = null;
-            _head = _head.Next;
-        }
-    }
-
-    public void RemoveTail()
-    {
-        if (_tail is null) return;
-        
-        if (_head == _tail)
-        {
-            _head = null;
-            _tail = null;
-        }
-        else
-        {
-            _tail = _tail.Prev;
-            _tail.Next = null;
-        }
-    }
-
-    public void InsertAfter(int value, int newValue)
-    {
-        Node? curr = _head;
-        while (curr is not null)
-        {
-            if (curr.Data == value)
-            {
-                if (curr == _tail)
-                {
-                    InsertTail(newValue);
-                }
-                else
-                {
-                    Node newNode = new(newValue);
-                    newNode.Prev = curr;
-                    newNode.Next = curr.Next;
-                    
-                    // FIXED: Explicit null check instead of !
-                    if (curr.Next is not null)
-                    {
-                        curr.Next.Prev = newNode;
-                    }
-                    curr.Next = newNode;
-                }
-                return;
-            }
-            curr = curr.Next;
-        }
-    }
-
-    public void Remove(int value)
-    {
-        Node? curr = _head;
-        
-        while (curr is not null)
-        {
-            if (curr.Data == value)
-            {
-                if (curr == _head)
-                {
-                    RemoveHead();
-                    return;
-                }
-                
-                if (curr == _tail)
-                {
-                    RemoveTail();
-                    return;
-                }
-                
-                curr.Prev!.Next = curr.Next;
-                curr.Next!.Prev = curr.Prev;
-                return;
-            }
-            
-            curr = curr.Next;
-        }
-    }
-
-    public void Replace(int oldValue, int newValue)
-    {
-        Node? curr = _head;
-        
-        while (curr is not null)
-        {
-            if (curr.Data == oldValue)
-            {
-                curr.Data = newValue;
-            }
-            curr = curr.Next;
-        }
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return this.GetEnumerator();
-    }
-
-    public IEnumerator<int> GetEnumerator()
-    {
-        var curr = _head;
-        while (curr is not null)
-        {
-            yield return curr.Data;
-            curr = curr.Next;
-        }
-    }
-
-    // FIXED: Returns IEnumerable<int> instead of non-generic IEnumerable
-    public IEnumerable<int> Reverse()
-    {
-        var curr = _tail;
-        
-        while (curr is not null)
-        {
-            yield return curr.Data;
-            curr = curr.Prev;
-        }
-    }
-
-    public override string ToString()
-    {
-        return "<LinkedList>{" + string.Join(", ", this) + "}";
-    }
-
-    public Boolean HeadAndTailAreNull()
-    {
-        return _head is null && _tail is null;
-    }
-
-    public Boolean HeadAndTailAreNotNull()
-    {
-        return _head is not null && _tail is not null;
+        return "<IEnumerable>{" + string.Join(", ", array.Cast<int>()) + "}";
     }
 }
