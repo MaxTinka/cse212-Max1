@@ -47,7 +47,7 @@ public class BinarySearchTree : IEnumerable<int>
         }
     }
 
-    public IEnumerable Reverse()
+    public IEnumerable<int> Reverse()
     {
         var numbers = new List<int>();
         TraverseBackward(_root, numbers);
