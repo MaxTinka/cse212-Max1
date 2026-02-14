@@ -1,5 +1,9 @@
+using System.Collections.Generic;
+using System.Linq;
+
 public static class Trees
 {
+    // Problem 5: Create Tree from Sorted List
     public static BinarySearchTree CreateTreeFromSortedList(int[] sortedNumbers)
     {
         var bst = new BinarySearchTree();
@@ -7,7 +11,6 @@ public static class Trees
         return bst;
     }
 
-    // Problem 5: Create Tree from Sorted List
     private static void InsertMiddle(int[] sortedNumbers, int first, int last, BinarySearchTree bst)
     {
         // Base case: no elements in current range
@@ -27,5 +30,14 @@ public static class Trees
         
         // Recursively process right half
         InsertMiddle(sortedNumbers, mid + 1, last, bst);
+    }
+}
+
+// Extension method for IEnumerable<int> to support the tests
+public static class EnumerableExtensions
+{
+    public static string AsString(this IEnumerable<int> source)
+    {
+        return "{" + string.Join(", ", source) + "}";
     }
 }
