@@ -36,7 +36,6 @@ public class Node
         }
     }
 
-    // Problem 2: Contains
     public bool Contains(int value)
     {
         if (value == Data)
